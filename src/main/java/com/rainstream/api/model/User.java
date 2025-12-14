@@ -10,7 +10,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -37,6 +39,14 @@ public class User implements UserDetails { // <--- IMPORTS UserDetails interface
 
     // Use an Enum for roles (Optional: String is fine for now, let's stick to String)
     private String role;
+
+    @ManyToMany(fetch = FetchType.EAGER) // Load watchlist immediately when user logs in
+    @JoinTable(
+            name = "user_watchlist",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "movie_id")
+    )
+    private Set<Movie> watchlist = new HashSet<>();
 
     // --- UserDetails Methods ---
 
