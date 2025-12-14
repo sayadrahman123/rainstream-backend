@@ -48,6 +48,14 @@ public class User implements UserDetails { // <--- IMPORTS UserDetails interface
     )
     private Set<Movie> watchlist = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_likes",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "movie_id")
+    )
+    private Set<Movie> likedMovies = new HashSet<>();
+
     // --- UserDetails Methods ---
 
     @Override
