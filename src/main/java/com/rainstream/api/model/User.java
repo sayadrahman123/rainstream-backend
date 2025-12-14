@@ -5,17 +5,23 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-@Data // Generates Getters, Setters, toString, etc.
-@Builder // Helps in creating objects easily
-@NoArgsConstructor // Generates a no-args constructor
-@AllArgsConstructor // Generates a constructor with all args
-@Entity // Tells Hibernate: "Make a table out of this class"
-@Table(name = "users") // Name the table 'users' in MySQL
-public class User {
+import java.util.Collection;
+import java.util.List;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "users")
+public class User implements UserDetails { // <--- IMPORTS UserDetails interface
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment ID
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true, nullable = false)
@@ -27,9 +33,46 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    private String profileImage; // URL to the avatar image
+    private String profileImage;
 
-    // We will start with a simple role. Later we can make this more complex.
-    // e.g., "ROLE_USER", "ROLE_ADMIN"
+    // Use an Enum for roles (Optional: String is fine for now, let's stick to String)
     private String role;
+
+    // --- UserDetails Methods ---
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Returns the user's role/permissions
+        return List.of(new SimpleGrantedAuthority(role));
+    }
+
+    @Override
+    public String getUsername() {
+        return email; // We will use EMAIL as the username for login
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
