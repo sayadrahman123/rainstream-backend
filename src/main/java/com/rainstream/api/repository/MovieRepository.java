@@ -11,6 +11,9 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     // Custom query to find featured movies for the Hero Slider
     List<Movie> findByIsFeaturedTrue();
 
-    // Custom query to find by Genre (e.g., for "Action" slider)
-    List<Movie> findByGenreContaining(String genre);
+
+    List<Movie> findByTitleContainingIgnoreCase(String title);
+
+
+    List<Movie> findByGenreContainingIgnoreCase(String genre);
 }

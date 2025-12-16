@@ -24,4 +24,8 @@ public class MovieService {
     public List<Movie> getFeaturedMovies() {
         return repository.findByIsFeaturedTrue();
     }
+
+    public List<Movie> searchMovies(String query) {
+        return repository.findByTitleContainingIgnoreCase(query);
+    }
 }

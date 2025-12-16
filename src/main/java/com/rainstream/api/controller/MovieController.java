@@ -29,4 +29,9 @@ public class MovieController {
     public ResponseEntity<Movie> addMovie(@RequestBody Movie movie) {
         return ResponseEntity.ok(service.addMovie(movie));
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Movie>> searchMovies(@RequestParam String query) {
+        return ResponseEntity.ok(service.searchMovies(query));
+    }
 }
