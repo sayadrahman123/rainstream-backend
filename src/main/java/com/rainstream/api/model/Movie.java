@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.time.LocalDate; // <--- Import this
 
 @Data
 @Builder
@@ -21,17 +22,20 @@ public class Movie {
     @Column(nullable = false)
     private String title;
 
-    @Column(length = 1000) // Allow longer descriptions
+    @Column(length = 1000)
     private String description;
 
-    private String posterUrl;      // Vertical image (for sliders)
-    private String backdropUrl;    // Horizontal image (for hero section)
-    private String videoUrl;       // Link to the actual video file/stream
+    private String posterUrl;
+    private String backdropUrl;
+    private String videoUrl;
 
-    private String genre;          // e.g., "Action, Sci-Fi"
-    private String releaseDate;    // e.g., "2023" or "2023-12-25"
-    private Double rating;         // e.g., 8.5
-    private String duration;       // e.g., "2h 15m"
+    private String genre;
 
-    private boolean isFeatured;    // To show in the Hero Slider
+    // CHANGED FROM String TO LocalDate
+    private LocalDate releaseDate;
+
+    private Double rating;
+    private String duration;
+
+    private boolean isFeatured;
 }

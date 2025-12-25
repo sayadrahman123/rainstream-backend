@@ -5,6 +5,7 @@ import com.rainstream.api.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -25,7 +26,16 @@ public class MovieService {
         return repository.findByIsFeaturedTrue();
     }
 
+//    public List<Movie> searchMovies(String query) {
+//        return repository.findByTitleContainingIgnoreCase(query);
+//    }
+
     public List<Movie> searchMovies(String query) {
-        return repository.findByTitleContainingIgnoreCase(query);
+        // Use the new custom query method
+        return repository.searchMovies(query);
+    }
+
+    public List<Movie> getUpcomingMovies() {
+        return repository.findByReleaseDateAfterOrderByReleaseDateAsc(LocalDate.now());
     }
 }

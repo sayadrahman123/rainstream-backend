@@ -38,6 +38,7 @@ public class SecurityConfig {
                         // 2. Public Endpoints
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/movies/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/posts/**").permitAll()
 
                         // 3. Everything else needs a token
                         .anyRequest().authenticated()

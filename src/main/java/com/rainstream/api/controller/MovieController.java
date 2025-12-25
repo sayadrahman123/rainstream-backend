@@ -34,4 +34,9 @@ public class MovieController {
     public ResponseEntity<List<Movie>> searchMovies(@RequestParam String query) {
         return ResponseEntity.ok(service.searchMovies(query));
     }
+
+    @GetMapping("/upcoming")
+    public ResponseEntity<List<Movie>> getUpcomingMovies() {
+        return ResponseEntity.ok(service.getUpcomingMovies());
+    }
 }
