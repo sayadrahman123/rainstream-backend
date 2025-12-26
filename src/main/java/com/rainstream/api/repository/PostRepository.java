@@ -7,4 +7,6 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long> {
     // Get newest posts first
     List<Post> findAllByOrderByCreatedAtDesc();
+
+    List<Post> findAllByAuthorNameOrderByCreatedAtDesc(String authorName);
 }

@@ -4,6 +4,7 @@ import com.rainstream.api.model.Post;
 import com.rainstream.api.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,5 +29,10 @@ public class PostController {
         post.setLikes(0);
         post.setCommentsCount(0);
         return ResponseEntity.ok(repository.save(post));
+    }
+
+    @GetMapping("/user/{authorName}")
+    public ResponseEntity<List<Post>> getUserPosts(@PathVariable String authorName) {
+        return ResponseEntity.ok(repository.findAllByAuthorNameOrderByCreatedAtDesc(authorName));
     }
 }
