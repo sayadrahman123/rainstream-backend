@@ -34,6 +34,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // 1. ALLOW PREFLIGHT REQUESTS (Crucial for React)
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/*.mp4").permitAll()
 
                         // 2. Public Endpoints
                         .requestMatchers("/api/v1/auth/**").permitAll()

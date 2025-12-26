@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -40,6 +41,12 @@ public class User implements UserDetails { // <--- IMPORTS UserDetails interface
     // Use an Enum for roles (Optional: String is fine for now, let's stick to String)
     private String role;
 
+    private String nickname;
+    private String bio;
+    private String location;
+    private String avatarUrl;
+    private LocalDate joinDate;
+
     @ManyToMany(fetch = FetchType.EAGER) // Load watchlist immediately when user logs in
     @JoinTable(
             name = "user_watchlist",
@@ -58,6 +65,15 @@ public class User implements UserDetails { // <--- IMPORTS UserDetails interface
 
     // --- UserDetails Methods ---
 
+    @PrePersist
+    protected void onCreate() {
+        joinDate = LocalDate.now();
+        if (avatarUrl == null) {
+            // Default random avatar based on email/randomness
+            avatarUrl = "https://api.dicebear.com/7.x/avataaars/svg?seed=" + (Math.random() * 1000);
+        }
+    }
+    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // Returns the user's role/permissions
