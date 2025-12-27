@@ -26,4 +26,7 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     List<Movie> searchMovies(@Param("query") String query);
 
     List<Movie> findByReleaseDateAfterOrderByReleaseDateAsc(LocalDate date);
+
+    // Fetch top 10 movies with matching genre, excluding the current movie ID
+    List<Movie> findTop10ByGenreContainingAndIdNot(String genre, Long id);
 }
