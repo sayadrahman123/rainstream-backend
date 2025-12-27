@@ -3,6 +3,7 @@ package com.rainstream.api.service;
 import com.rainstream.api.model.Movie;
 import com.rainstream.api.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -37,5 +38,16 @@ public class MovieService {
 
     public List<Movie> getUpcomingMovies() {
         return repository.findByReleaseDateAfterOrderByReleaseDateAsc(LocalDate.now());
+    }
+
+
+    public ResponseEntity<List<Movie>> getSimilarMovies(Long id) {
+        Movie currentMovie = repository.findById(id).orElseThrow(() -> new RuntimeException("Movie not found"));
+
+        String primaryGenre = currentMovie.getGenre().split(",")[0].trim();
+
+        return ResponseEntity.ok(
+                repository.findTop10ByGenreContainingAndIdNot(primaryGenre, id)
+        );
     }
 }

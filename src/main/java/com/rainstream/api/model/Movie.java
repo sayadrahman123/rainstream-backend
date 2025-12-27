@@ -1,11 +1,13 @@
 package com.rainstream.api.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate; // <--- Import this
+import java.util.List;
 
 @Data
 @Builder
@@ -38,4 +40,18 @@ public class Movie {
     private String duration;
 
     private boolean isFeatured;
+
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Cast> castList;
+
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Episode> episodeList;
+
+    private String type; // "MOVIE" or "SERIES"
+
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Trailer> trailerList;
 }
