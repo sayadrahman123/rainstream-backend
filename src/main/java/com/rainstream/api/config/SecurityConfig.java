@@ -36,6 +36,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/*.mp4").permitAll()
 
+                        .requestMatchers(HttpMethod.GET, "/api/v1/posts/**").permitAll()
+
                         // 2. Public Endpoints
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/movies/**").permitAll()
