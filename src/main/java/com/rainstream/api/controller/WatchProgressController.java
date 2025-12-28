@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/progress")
@@ -29,6 +30,30 @@ public class WatchProgressController {
     public ResponseEntity<List<WatchProgress>> getMyProgress() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         return ResponseEntity.ok(progressRepository.findByUserEmailOrderByLastWatchedDesc(email));
+    }
+
+    @GetMapping("/{movieId}") // <--- Changed to PathVariable for cleaner URL: /api/progress/55
+    public ResponseEntity<?> getProgressByMovieId(@PathVariable Long movieId) {
+
+        // 1. Get current user
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        // 2. Query DB
+        Optional<WatchProgress> progress = progressRepository.findByUserEmailAndMovieId(email, movieId);
+
+        // 3. Handle result logic
+        if (progress.isPresent()) {
+            return ResponseEntity.ok(progress.get());
+        } else {
+            // CRITICAL FIX: Don't throw error!
+            // Return an empty object or a default "0 progress" object.
+            // This lets the frontend know it's safe to start at 0:00.
+            WatchProgress newProgress = new WatchProgress();
+            newProgress.setMovie(movieRepository.findById(movieId).orElseThrow());
+            newProgress.setProgressSeconds(0D); // Start at 0
+            newProgress.setTotalDurationSeconds(0D);
+            return ResponseEntity.ok(newProgress);
+        }
     }
 
     @PostMapping
