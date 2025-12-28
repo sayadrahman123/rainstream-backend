@@ -22,13 +22,17 @@ public class Post {
     private String title;
 
     @Column(length = 2000)
-    private String content; // The body of the post
+    private String content;
 
-    private String authorName; // The user who posted it
-    private String movieTitle; // Optional: Linked movie (e.g., "Spiderman 3")
+    private String authorName;
+    private String movieTitle;
 
-    private Integer likes;
-    private Integer commentsCount;
+    // Initialize to 0 to prevent NullPointerExceptions
+    private Integer likes = 0;
+    private Integer commentsCount = 0;
+
+    @Transient // Correct! This field is NOT stored in the DB
+    private boolean isLiked;
 
     private LocalDateTime createdAt;
 
@@ -36,5 +40,12 @@ public class Post {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
         if (authorName == null) authorName = "Anonymous";
+
+        // Safety check: ensure these are never null
+        if (likes == null) likes = 0;
+        if (commentsCount == null) commentsCount = 0;
+
     }
+
+
 }
